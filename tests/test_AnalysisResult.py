@@ -8,9 +8,9 @@ class TestAnalysisResults(unittest.TestCase):
         self.assertEqual(Experiment.CMS.name,'CMS') 
 
     def test_AnalysisResult(self):
-        res = AnalysisResult('AAA','ATLAS',100,'bbbb')
+        res = AnalysisResult('Analysis1','ATLAS',100,'bbbb','ggF', 13.)
         self.assertEqual(res.lumi,100)
-        self.assertEqual(res.name,'AAA')
+        self.assertEqual(res.name, 'Analysis1')
         self.assertEqual(res.experiment,'ATLAS')
         
 if __name__ == '__main__':
