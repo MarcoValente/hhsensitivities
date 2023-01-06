@@ -4,9 +4,14 @@ class Experiment(Enum):
     NONE=0
     ATLAS=1
     CMS=2
+class HHChannel(Enum):
+    Comb=0
+    bbbb=1
+    bbtt=2
+    bbyy=3
 
 class AnalysisResult:
-    def __init__(self,name,lumi,experiment,mu95=None,mu_obs=None, Z=None) -> None:
+    def __init__(self, name, experiment, lumi, hh_channel, mu95_obs=None, mu95_exp=None, mu_obs=None, Z=None, ref=None) -> None:
         '''__init__ AnalysisResult
 
         Class describing a certain experiment analysis result
@@ -15,23 +20,32 @@ class AnalysisResult:
         ----------
         name : str
             Name of the analysis
-        lumi : float
-            Luminosity in fb-1
         experiment : str or AnalysisResult.Experiment enum
             Experiment that produced this result
+        lumi : float
+            Luminosity in fb-1
+        hh_channel: str or AnalysisResult.HHChannel enum
+            HH channel corresponding to result
         Z : float or None
             Signal statistical significance
-        mu95 : float or None
-            95% CL upper limit on signal strength
+        mu95_obs : float or None
+            95% CL observed upper limit on signal strength
+        mu95_exp : float or None
+            95% CL expected upper limit on signal strength
         mu_obs : float or None
             Observed signal strength
+        ref : str
+            Reference to result (arxiv entry, etc.)
         '''
         self._name = name
         self._exp_enum = Experiment[experiment] if isinstance(experiment, str) else experiment
         self._lumi = lumi #Luminosity in fb-1
+        self._hh_chan = HHChannel[hh_channel] if isinstance(hh_channel, str) else hh_channel
         self._Z = Z
-        self._mu95 = mu95
+        self._mu95_obs = mu95_obs
+        self._mu95_exp = mu95_exp
         self._mu_obs = mu_obs
+        self._ref = ref
         pass
 
     @property
@@ -47,13 +61,25 @@ class AnalysisResult:
         return self._lumi
 
     @property
+    def hh_channel(self):
+        return self._hh_chan.name
+
+    @property
     def Z(self):
         return self._Z
 
     @property
-    def mu95(self):
-        return self._mu95
+    def mu95_obs(self):
+        return self._mu95_obs
+
+    @property
+    def mu95_exp(self):
+        return self._mu95_exp
 
     @property
     def mu_obs(self):
         return self._mu_obs
+    
+    @property
+    def ref(self):
+        return self._ref
