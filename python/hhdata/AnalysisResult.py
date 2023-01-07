@@ -15,7 +15,7 @@ class HHProd(Enum):
     ggF=0
     VBF=1
 class AnalysisResult:
-    def __init__(self, name, experiment, lumi, hh_channel, hh_prod, energy, mu95_obs=None, mu95_exp=None, mu_obs=None, Z=None, ref=None) -> None:
+    def __init__(self, name, experiment, lumi, hh_channel, hh_prod, energy, mu95_obs=None, mu95_exp=None, mu95_exp_err=None, mu_obs=None, Z=None, ref=None) -> None:
         '''__init__ AnalysisResult
 
         Class describing a certain experiment analysis result
@@ -38,8 +38,12 @@ class AnalysisResult:
             Signal statistical significance
         mu95_obs : float or None
             95% CL observed upper limit on signal strength
+        mu95_obs_err : list() or None
+            1 sigma error (up and down) on 95% CL observed upper limit on signal strength
         mu95_exp : float or None
             95% CL expected upper limit on signal strength
+        mu95_exp_err : list() or None
+            1 sigma error (up and down) on 95% CL expected upper limit on signal 
         mu_obs : float or None
             Observed signal strength
         ref : str
@@ -54,6 +58,7 @@ class AnalysisResult:
         self._Z = Z
         self._mu95_obs = mu95_obs
         self._mu95_exp = mu95_exp
+        self._mu95_exp_err = mu95_exp_err
         self._mu_obs = mu_obs
         self._ref = ref
         pass
@@ -95,9 +100,19 @@ class AnalysisResult:
         return self._mu95_exp
 
     @property
+    def mu95_exp_err(self):
+        return self._mu95_exp_err
+
+    @property
     def mu_obs(self):
         return self._mu_obs
     
     @property
     def ref(self):
         return self._ref
+
+    def __str__(self) -> str:
+        return f'AnalysisResult(name={self._name},lumi={self._lumi} fb-1,energy={self._energy} TeV)'
+
+    def __repr__(self) -> str:
+        return self.__str__()
